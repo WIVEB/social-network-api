@@ -1,0 +1,13 @@
+package com.example.social_network.business
+
+import com.example.business.Dao
+import com.example.business.User
+import com.example.persistance.UserEntity
+
+interface UserDao : Dao {
+    fun getUser(id: String): User
+    fun addUserFriend(userId: String, friendId: String)
+    fun insertUser(user: User)
+    fun findByEmail(email: String): UserEntity?
+    fun findAll(): List<User>
+}
