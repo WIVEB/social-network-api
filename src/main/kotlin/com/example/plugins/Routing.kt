@@ -10,18 +10,19 @@ import com.example.services.PostService
 import com.example.services.UserService
 import com.example.social_network.controllers.authenticationController
 import com.example.social_network.controllers.feedController
+import io.ktor.http.*
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 
-fun Application.configureRouting() {
+fun Application.configureRouting(mongoDBClient: MongoDBClient) {
 
     routing {
-        val socialNetworkDB = MongoDBClient("mongodb://localhost:27017", "social_network")
-        val userDao = UserDaoImpl(socialNetworkDB)
-        val postDao = PostDaoImpl(socialNetworkDB)
+        val userDao = UserDaoImpl(mongoDBClient)
+        val postDao = PostDaoImpl(mongoDBClient)
         val userService = UserService(userDao)
         val postService = PostService(userDao, postDao)
-        val authenticationDao = AuthenticationDao(socialNetworkDB)
+        val authenticationDao = AuthenticationDao(mongoDBClient)
         authenticationController(authenticationDao)
         userController(userService)
         postController(postService)

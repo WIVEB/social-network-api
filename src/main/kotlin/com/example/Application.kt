@@ -42,7 +42,8 @@ fun main() {
 }
 
 fun Application.module() {
-    configureAuthentication(AuthenticationDao(MongoDBClient("mongodb://localhost:27017", "social_network")))
-    configureRouting()
+    val mongoDBClient = MongoDBClient("mongodb://localhost:27017", "social_network")
+    configureAuthentication(AuthenticationDao(mongoDBClient))
+    configureRouting(mongoDBClient)
     configureSerialization()
 }
