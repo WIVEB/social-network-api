@@ -1,10 +1,10 @@
 version: '3'
 
 services:
-  ktor-server:
-    image: openjdk:11-jre-slim
+  social_network_api:
+    image: socialnetwork:latest
     volumes:
-      - ./ktor-server:/app
+      - /media/HDD/Docker/teamcity/socialnetwork/api:/app
     working_dir: /app
     command: java -jar ktor-server.jar
     ports:
@@ -17,4 +17,4 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - /media/HDD/Docker/teamcity/socialnetwork:/data/db
+      - /media/HDD/Docker/teamcity/socialnetwork/mongo:/data/db
