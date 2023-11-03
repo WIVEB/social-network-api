@@ -1,14 +1,14 @@
-# Use the openjdk image as the base image
-FROM openjdk:11
+FROM gradle:7-jdk11 AS build
+COPY --chown=gradle:gradle . /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle buildFatJar --no-daemon
 
-# Create a directory in the container
+# Stage 2: Create the final image
+FROM openjdk:11
+EXPOSE 8080
 RUN mkdir /app
 
-# Copy the JAR file
-COPY socialnetwork-*.jar /app/socialnetwork.jar
+# Copy the JAR from the previous stage
+COPY --from=build /home/gradle/src/build/libs/socialnetwork-*.jar /app/
 
-# Expose the port
-EXPOSE 8080
-
-# Define the command to run your application
-ENTRYPOINT ["java", "-jar", "/app/socialnetwork.jar"]
+ENTRYPOINT ["java","-jar","/app/socialnetwork*.jar"]
