@@ -3,8 +3,8 @@ COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle buildFatJar --no-daemon
 
-# Get the version from gradle properties and store it in a variable
-RUN VERSION=$(gradle properties -q | awk '/^version:/ {print $2}')
+# Get the version from Gradle task and store it in a variable
+RUN VERSION=$(gradle -q printVersion)
 
 FROM openjdk:11
 EXPOSE 8080
