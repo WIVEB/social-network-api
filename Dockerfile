@@ -1,11 +1,10 @@
-# Use the official OpenJDK image as the base image
-FROM openjdk:11-jre-slim
+FROM gradle:7-jdk11 AS build
+COPY --chown=gradle:gradle . /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle buildFatJar --no-daemon
 
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy the Ktor application JAR file into the container
-COPY socialnetwork.jar /app/socialnetwork.jar
-
-# Define the command to run your Ktor application
-CMD ["java", "-jar", "socialnetwork-${VERSION}.jar"]
+FROM openjdk:11
+EXPOSE 8080:8080
+RUN mkdir /app
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/ktor-docker-sample.jar
+ENTRYPOINT ["java","-jar","/app/ktor-docker-sample.jar"]
