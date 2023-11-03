@@ -12,5 +12,5 @@ RUN mkdir /app
 ARG APP_VERSION
 ENV VERSION=${APP_VERSION}
 
-COPY --from=build /home/gradle/src/build/libs/socialnetwork-${VERSION}.jar /app/socialnetwork.jar
+COPY --from=build /home/gradle/src/build/libs/socialnetwork-*.jar /app/socialnetwork.jar
 ENTRYPOINT ["java","-jar","/app/socialnetwork.jar"]
