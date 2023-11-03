@@ -23,7 +23,7 @@ repositories {
 }
 
 ext {
-    var AppVersion = project.version
+    set("AppVersion", project.version)
 }
 
 dependencies {
