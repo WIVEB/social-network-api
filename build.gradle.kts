@@ -38,7 +38,7 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.4")
 }
 
-tasks.register("printVersion") {
+tasks.register("getVersion") {
     // any code that goes here is part of configuring the task
     // this code will always get run, even if the task is not executed
     doLast { // add a task action
