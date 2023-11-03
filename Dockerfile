@@ -12,6 +12,7 @@ RUN mkdir /app
 COPY --from=build /home/gradle/src/build/libs/socialnetwork-*.jar /app/
 
 # Rename the JAR file
-RUN mv /app/socialnetwork-*.jar /app/socialnetwork.jar
+COPY /app/socialnetwork-*.jar /app/socialnetwork.jar
+RUN rm /app/socialnetwork-*.jar
 
 ENTRYPOINT ["java","-jar","/app/socialnetwork.jar"]
