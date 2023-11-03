@@ -22,6 +22,10 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    var AppVersion = project.version
+}
+
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
@@ -36,14 +40,4 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("io.mockk:mockk:1.13.4")
-}
-
-tasks.register("getVersion") {
-    // any code that goes here is part of configuring the task
-    // this code will always get run, even if the task is not executed
-    doLast { // add a task action
-        // any code that goes here is part of executing the task
-        // this code will only get run if and when the task gets executed
-        print(project.version)
-    }
 }
