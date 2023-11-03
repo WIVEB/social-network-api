@@ -4,6 +4,8 @@ FROM openjdk:11-jre-slim
 # Set the working directory inside the container
 WORKDIR /app
 
+RUN echo $(ls)
+
 # Copy the Ktor application JAR file into the container
 COPY socialnetwork-${VERSION}.jar /app/socialnetwork-${VERSION}.jar
 
