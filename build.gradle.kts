@@ -44,6 +44,6 @@ tasks.register("printVersion") {
     doLast { // add a task action
         // any code that goes here is part of executing the task
         // this code will only get run if and when the task gets executed
-        println(project.version)
+        print(project.version)
     }
 }

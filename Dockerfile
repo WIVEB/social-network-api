@@ -4,7 +4,7 @@ WORKDIR /home/gradle/src
 RUN gradle buildFatJar --no-daemon
 
 # Get the version from Gradle task and store it in a variable
-RUN VERSION=$(gradle -q printVersion)
+RUN VERSION=$(./gradlew -q getVersion)
 
 FROM openjdk:11
 EXPOSE 8080
