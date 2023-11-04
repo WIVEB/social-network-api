@@ -9,7 +9,7 @@ EXPOSE 8080
 RUN mkdir /app
 
 # Copy the JAR from the previous stage
-COPY --from=build /home/gradle/src/build/libs/socialnetwork-*.jar /app/
-ADD /app/socialnetwork-*.jar /app/socialnetwork.jar
+COPY --from=build /home/gradle/src/build/libs/socialnetwork-0.0.1.jar /app/socialnetwork.jar
+ADD /app/socialnetwork-0.0.1.jar /app/socialnetwork.jar
 
 ENTRYPOINT ["java","-jar","/app/socialnetwork.jar"]
