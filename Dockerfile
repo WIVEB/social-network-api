@@ -12,4 +12,4 @@ RUN mkdir /app
 COPY --from=build /home/gradle/src/build/libs/socialnetwork-*.jar /app/
 COPY /app/socialnetwork-*.jar /app/socialnetwork.jar
 
-ENTRYPOINT ["java","-jar","/app/socialnetwork*.jar"]
+ENTRYPOINT ["java","-jar","/app/socialnetwork.jar"]
