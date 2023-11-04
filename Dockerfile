@@ -10,6 +10,5 @@ RUN mkdir /app
 
 # Copy the JAR from the previous stage
 COPY --from=build /home/gradle/src/build/libs/socialnetwork-0.0.1.jar /app/socialnetwork.jar
-ADD /app/socialnetwork-0.0.1.jar /app/socialnetwork.jar
 
 ENTRYPOINT ["java","-jar","/app/socialnetwork.jar"]
