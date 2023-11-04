@@ -1,7 +1,7 @@
 package com.example.persistance
 
 import com.example.business.User
-import com.example.social_network.controllers.SignUpRequest
+import com.example.controllers.SignUpRequest
 import kotlinx.serialization.Serializable
 import java.util.UUID
 

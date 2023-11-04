@@ -1,13 +1,10 @@
-package com.example.social_network.controllers
+package com.example.controllers
 
-import com.example.social_network.business.UserDao
-import com.example.business.User
 import com.example.controllers.dto.UserDTO
 import com.example.services.UserService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.encodeToString

@@ -1,8 +1,6 @@
-package com.example.social_network.controllers
+package com.example.controllers
 
 import com.example.business.AuthenticationDao
-import com.example.business.User
-import com.example.social_network.business.UserDao
 import com.mongodb.MongoException
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -10,7 +8,6 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.security.Principal
 
 @kotlinx.serialization.Serializable
 data class SignUpRequest(val firstname: String, val lastname: String, val email: String, val password: String)

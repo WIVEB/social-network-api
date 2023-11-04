@@ -1,10 +1,7 @@
 package com.example.controllers.dto
 
 import com.example.business.User
-import com.example.persistance.UserEntity
-import com.example.social_network.controllers.SignUpRequest
 import kotlinx.serialization.Serializable
-import java.util.*
 
 @Serializable
 data class UserDTO(

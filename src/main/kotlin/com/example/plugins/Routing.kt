@@ -2,18 +2,16 @@ package com.example.plugins
 
 import com.example.business.AuthenticationDao
 import com.example.controllers.postController
-import com.example.social_network.controllers.userController
+import com.example.controllers.userController
 import com.example.persistance.MongoDBClient
 import com.example.persistance.PostDaoImpl
 import com.example.persistance.UserDaoImpl
 import com.example.services.PostService
 import com.example.services.UserService
-import com.example.social_network.controllers.authenticationController
-import com.example.social_network.controllers.feedController
-import io.ktor.http.*
+import com.example.controllers.authenticationController
+import com.example.controllers.feedController
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
 
 fun Application.configureRouting(mongoDBClient: MongoDBClient) {
 

@@ -1,4 +1,4 @@
-package com.example.social_network.controllers
+package com.example.controllers
 
 import com.example.controllers.dto.PostDTO
 import com.example.services.PostService

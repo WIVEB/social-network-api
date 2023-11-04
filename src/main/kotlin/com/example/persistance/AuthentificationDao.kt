@@ -1,6 +1,6 @@
 package com.example.business
 
-import com.example.social_network.controllers.SignUpRequest
+import com.example.controllers.SignUpRequest
 import com.example.persistance.MongoDBClient
 import com.example.persistance.UserEntity
 import kotlinx.serialization.decodeFromString
