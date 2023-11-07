@@ -3,10 +3,6 @@ version: '3'
 services:
   social_network_api:
     image: social-network:latest
-    volumes:
-      - /media/HDD/Docker/teamcity/socialnetwork/api:/app
-    working_dir: /app
-    command: java -jar ktor-server.jar
     ports:
       - "8080:8080"
     depends_on:
