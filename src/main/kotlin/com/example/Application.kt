@@ -7,7 +7,6 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import com.example.plugins.*
 import io.ktor.network.tls.certificates.*
-import io.ktor.server.response.*
 import org.slf4j.*
 import java.io.*
 
@@ -42,7 +41,7 @@ fun main() {
 }
 
 fun Application.module() {
-    val mongoDBClient = MongoDBClient("mongodb://localhost:27017", "social_network")
+    val mongoDBClient = MongoDBClient("mongodb://192.169.18.2:27017", "social_network")
     configureAuthentication(AuthenticationDao(mongoDBClient))
     configureRouting(mongoDBClient)
     configureSerialization()

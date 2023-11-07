@@ -3,6 +3,9 @@ version: '3'
 services:
   social_network_api:
     image: social-network:latest
+    networks:
+      social_network_api_network:
+        ipv4_address: 192.169.18.1
     ports:
       - "8080:8080"
     depends_on:
@@ -10,7 +13,17 @@ services:
 
   mongodb:
     image: mongo
+    networks:
+      social_network_api_network:
+        ipv4_address: 192.169.18.2
     ports:
       - "27017:27017"
     volumes:
       - /media/HDD/Docker/teamcity/socialnetwork/mongo:/data/db
+
+networks:
+  social_network_api_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet : 192.169.18.0/16
