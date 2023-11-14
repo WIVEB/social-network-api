@@ -29,16 +29,14 @@ class ChatService(private val userDao: UserDao, private val chatDao: ChatDao) {
 
     fun createConversation(userEmail: String, request: AddConversationDTO){
         val creator = userDao.findByEmail(userEmail)!!.toUser()
-        val conversationMembers = request.conversationMembers.map {
-            userDao.getUser(it)
-        }.toMutableList()
+        val conversationMembers = request.conversationMembers.toMutableList()
 
         if(!isUserMemberOf(creator,conversationMembers)){
-            conversationMembers.add(creator)
+            conversationMembers.add(creator.id!!)
         }
 
         val message = createMessage(creator, request)
-        val conversation = createConversation(creator, request, message)
+        val conversation = createConversation(creator, conversationMembers, message)
 
         chatDao.insertConversation(conversation)
     }
@@ -59,23 +57,23 @@ class ChatService(private val userDao: UserDao, private val chatDao: ChatDao) {
 
     private fun createConversation(
         creator: User,
-        request: AddConversationDTO,
+        conversationMembers: List<String>,
         message: Message
     ): Conversation {
         return Conversation(
             id = UUID.randomUUID().toString(),
             creator = creator,
             createdAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-            users = request.conversationMembers.map { getUser(it) },
+            users = conversationMembers.map { getUser(it) },
             messages = listOf(message)
         )
     }
 
     private fun isUserMemberOf(
         creator: User,
-        conversationMembers: List<User>?
+        conversationMembers: List<String>?
     ) : Boolean{
-        return conversationMembers?.find { creator.id == it.id } != null
+        return conversationMembers?.find { creator.id == it } != null
     }
 
     fun getUserConversations(userEmail: String): List<Conversation> {
