@@ -9,6 +9,13 @@ class UserService(private val userDao: UserDao) {
         return userDao.getUser(userId)
     }
 
+    fun getUserProfile(userId: String, requestUserEmail: String): User {
+        if(userId == "me"){
+            return userDao.findByEmail(requestUserEmail)!!.toUser()
+        }
+        return userDao.getUser(userId)
+    }
+
     fun addFriend(userEmail: String, friendId: String){
         val user = userDao.findByEmail(userEmail)!!
         userDao.addUserFriend(user.id, friendId)

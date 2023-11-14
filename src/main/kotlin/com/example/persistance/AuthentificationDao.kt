@@ -2,7 +2,7 @@ package com.example.business
 
 import com.example.controllers.SignUpRequest
 import com.example.persistance.MongoDBClient
-import com.example.persistance.UserEntity
+import com.example.persistance.entity.UserEntity
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import org.bson.Document

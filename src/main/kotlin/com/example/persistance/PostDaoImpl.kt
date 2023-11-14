@@ -2,7 +2,10 @@ package com.example.persistance
 
 import com.example.business.User
 import com.example.business.models.Post
+import com.example.persistance.entity.PostEntity
+import com.example.persistance.entity.UserEntity
 import com.example.social_network.business.PostDao
+import com.mongodb.client.model.Updates
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import org.bson.Document
@@ -23,10 +26,21 @@ class PostDaoImpl(socialNetworkDB: MongoDBClient) : PostDao {
         return postEntity.toPost(this.getPostUser(postEntity.userId))
     }
 
-    override fun insertPost(post: Post) {
-        post.id = UUID.randomUUID().toString();
+    override fun insertPost(post: Post): String {
+        post.id = UUID.randomUUID().toString()
         val postEntity = PostEntity.from(post)
         postCollection.insertOne(Document.parse(jsonFormatter.encodeToString(postEntity)))
+        return post.id!!
+    }
+
+    override fun updatePost(post: Post) {
+        postCollection.updateOne(
+            PostEntity::id eq post.id,
+            Updates.combine(
+                Updates.set(PostEntity::text.name, post.text),
+                Updates.set(PostEntity::image.name, post.images)
+            )
+        )
     }
 
     override fun findByUser(userId: String): List<Post> {

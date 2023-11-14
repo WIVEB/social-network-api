@@ -2,7 +2,7 @@ package com.example.social_network.business
 
 import com.example.business.Dao
 import com.example.business.User
-import com.example.persistance.UserEntity
+import com.example.persistance.entity.UserEntity
 
 interface UserDao : Dao {
     fun getUser(id: String): User

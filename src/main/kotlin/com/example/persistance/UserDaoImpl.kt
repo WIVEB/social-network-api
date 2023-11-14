@@ -1,6 +1,7 @@
 package com.example.persistance
 
 import com.example.business.User
+import com.example.persistance.entity.UserEntity
 import com.example.social_network.business.UserDao
 import com.mongodb.client.model.Updates
 import kotlinx.serialization.decodeFromString

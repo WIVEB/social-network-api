@@ -24,6 +24,18 @@ class PostService(private val userDao: UserDao, private val postDao: PostDao) {
         postDao.insertPost(post)
     }
 
+    fun updateUserPost(userEmail: String, postId: String, postRequest: PostRequest){
+        val user = userDao.findByEmail(userEmail)!!.toUser()
+        val post = Post(
+            id = postId,
+            user = user,
+            createdAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+            text = postRequest.text,
+            images = postRequest.images,
+        )
+        postDao.updatePost(post)
+    }
+
     fun getUserFeed(userEmail: String): List<Post> {
         val user = userDao.findByEmail(userEmail)?.toUser()!!
         val feedUsers = mutableListOf<String>()

@@ -14,11 +14,23 @@ data class PostRequest(val text: String? = "", val images: List<String>? = empty
 fun Route.postController(postService: PostService) {
     authenticate("auth_basic") {
         route("/post") {
-            put() {
+            post() {
                 val postRequest = call.receive<PostRequest>()
                 val userEmail = call.principal<UserIdPrincipal>()?.name!!
                 try {
                     postService.addUserPost(userEmail, postRequest)
+                    call.response.status(HttpStatusCode.OK)
+                } catch (e: Error) {
+                    throw e
+                }
+            }
+
+            put("/{id}") {
+                val postRequest = call.receive<PostRequest>()
+                val userEmail = call.principal<UserIdPrincipal>()?.name!!
+                val postId = call.parameters["id"]!!
+                try {
+                    postService.updateUserPost(userEmail, postId, postRequest)
                     call.response.status(HttpStatusCode.OK)
                 } catch (e: Error) {
                     throw e

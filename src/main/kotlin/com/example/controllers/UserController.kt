@@ -15,8 +15,9 @@ fun Route.userController(userService: UserService) {
     authenticate("auth_basic") {
         route("/user") {
             get("/{id}") {
+                val requestUserEmail = call.principal<UserIdPrincipal>()?.name!!
                 val id = call.parameters["id"]!!
-                val user = userService.getUser(id)
+                val user = userService.getUserProfile(id, requestUserEmail)
                 val response = UserDTO.from(user)
                 call.respond(Json.encodeToString(response))
             }
