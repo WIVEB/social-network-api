@@ -42,7 +42,11 @@ fun Route.chatController(chatService: ChatService) {
             get("/{id}") {
                 val requestUserEmail = call.principal<UserIdPrincipal>()?.name!!
                 val conversationId = call.parameters["id"]!!
-                chatService.getUserConversation(requestUserEmail, conversationId)
+
+                val userConversation = chatService.getUserConversation(requestUserEmail, conversationId)
+                val response = ChatDTO.from(userConversation)
+
+                call.respond(HttpStatusCode.OK, Json.encodeToString(response))
             }
 
             post {
