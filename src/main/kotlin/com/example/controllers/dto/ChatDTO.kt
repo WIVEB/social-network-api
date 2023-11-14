@@ -9,7 +9,8 @@ data class ChatDTO (var id: String?,
                     var users: List<String>,
                     val createdAt: LocalDateTime,
                     val name: String? = null,
-                    val thumbnail: String? = null){
+                    val thumbnail: String? = null,
+                    val messages: List<ChatMessageDTO>){
     companion object{
         fun from (chat: Conversation): ChatDTO {
             return ChatDTO(
@@ -17,7 +18,8 @@ data class ChatDTO (var id: String?,
                 users = chat.users.map { it.id!! }.toList(),
                 createdAt = chat.createdAt,
                 name = chat.name,
-                thumbnail = chat.thumbnail
+                thumbnail = chat.thumbnail,
+                messages = chat.messages!!.map { ChatMessageDTO.from(it) }
             )
         }
     }
