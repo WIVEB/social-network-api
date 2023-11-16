@@ -76,7 +76,7 @@ fun Route.chatController(chatService: ChatService) {
                 }
             }
 
-            webSocket("/chat") {
+            webSocket() {
                 send("You are connected!")
                 for(frame in incoming) {
                     frame as? Frame.Text ?: continue
