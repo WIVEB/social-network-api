@@ -80,8 +80,8 @@ fun Route.chatController(chatService: ChatService) {
             }
 
             webSocket() {
-                val request = receiveDeserialized<Request>()
-                println(request)
+                println("Hello!")
+                sendSerialized(Request("Hellooo"))
             }
         }
     }
