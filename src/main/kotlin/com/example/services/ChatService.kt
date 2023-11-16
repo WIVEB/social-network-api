@@ -86,6 +86,10 @@ class ChatService(private val userDao: UserDao, private val chatDao: ChatDao) {
         return userDao.getUser(userUuid)
     }
 
+    fun getUserByEmail(email: String): User {
+        return userDao.findByEmail(email)!!.toUser()
+    }
+
     fun getUserConversation(userEmail: String, conversationId: String): Conversation {
         val userConversations = getUserConversations(userEmail)
         val conversation = userConversations.find { it.id == conversationId }

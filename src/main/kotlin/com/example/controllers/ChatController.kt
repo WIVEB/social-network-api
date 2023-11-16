@@ -2,6 +2,7 @@ package com.example.controllers
 
 import com.example.controllers.dto.ChatDTO
 import com.example.controllers.dto.UserDTO
+import com.example.plugins.chat.Session
 import com.example.services.ChatService
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -9,9 +10,13 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.websocket.*
+import io.ktor.websocket.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.util.*
+import kotlin.collections.LinkedHashSet
 
 @Serializable()
 data class AddConversationMessageDTO(
@@ -68,6 +73,15 @@ fun Route.chatController(chatService: ChatService) {
                     call.response.status(HttpStatusCode.OK)
                 } catch (e: Error) {
                     throw e
+                }
+            }
+
+            webSocket("/chat") {
+                send("You are connected!")
+                for(frame in incoming) {
+                    frame as? Frame.Text ?: continue
+                    val receivedText = frame.readText()
+                    send("You said: $receivedText")
                 }
             }
         }

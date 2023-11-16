@@ -45,4 +45,5 @@ fun Application.module() {
     configureAuthentication(AuthenticationDao(mongoDBClient))
     configureRouting(mongoDBClient)
     configureSerialization()
+    configureSockets()
 }
