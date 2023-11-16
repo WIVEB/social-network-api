@@ -30,6 +30,9 @@ data class AddConversationDTO(
     val message: AddConversationMessageDTO
 )
 
+@Serializable
+data class Request(val text: String)
+
 fun Route.chatController(chatService: ChatService) {
     authenticate("auth_basic") {
         route("/chat") {
@@ -77,12 +80,8 @@ fun Route.chatController(chatService: ChatService) {
             }
 
             webSocket() {
-                send("You are connected!")
-                for(frame in incoming) {
-                    frame as? Frame.Text ?: continue
-                    val receivedText = frame.readText()
-                    send("You said: $receivedText")
-                }
+                val request = receiveDeserialized<Request>()
+                println(request)
             }
         }
     }
