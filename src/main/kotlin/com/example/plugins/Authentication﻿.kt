@@ -10,6 +10,8 @@ fun Application.configureAuthentication(authenticationDao: AuthenticationDao) {
 
             realm = "Ktor Server"
             validate { credentials ->
+                println(credentials.name)
+                println(credentials.password)
                 val userEntity = authenticationDao.findByEmail(credentials.name)
                 if (userEntity?.email == credentials.name && userEntity.password == credentials.password) {
                     UserIdPrincipal(credentials.name)
