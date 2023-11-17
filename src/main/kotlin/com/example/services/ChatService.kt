@@ -3,8 +3,8 @@ package com.example.services
 import com.example.business.User
 import com.example.business.models.Conversation
 import com.example.business.models.Message
-import com.example.controllers.AddConversationDTO
-import com.example.controllers.AddConversationMessageDTO
+import com.example.controllers.dto.ChatDTO
+import com.example.controllers.dto.ChatMessageDTO
 import com.example.social_network.business.ChatDao
 import com.example.social_network.business.UserDao
 import kotlinx.datetime.Clock
@@ -14,43 +14,47 @@ import java.util.UUID
 
 class ChatService(private val userDao: UserDao, private val chatDao: ChatDao) {
 
-    fun addConversationMessage(userEmail: String, conversationId: String, request: AddConversationMessageDTO){
+    fun addConversationMessage(userEmail: String, conversationId: String, messageText: String? = null,
+                               messageImages: List<String>? = null): Message {
         val user = userDao.findByEmail(userEmail)!!.toUser()
         val message = Message(
             id = UUID.randomUUID().toString(),
             author = user,
             createdAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-            text = request.text,
-            images = request.images,
+            text = messageText,
+            images = messageImages,
             isDeleted = false,
         )
         chatDao.insertConversationMessage(message, conversationId)
+        return message
     }
 
-    fun createConversation(userEmail: String, request: AddConversationDTO){
+    fun createConversation(userEmail: String, request: ChatDTO){
         val creator = userDao.findByEmail(userEmail)!!.toUser()
-        val conversationMembers = request.conversationMembers.toMutableList()
+
+        val conversationMembers = (request.users ?: emptyList()).toMutableList()
 
         if(!isUserMemberOf(creator,conversationMembers)){
             conversationMembers.add(creator.id!!)
         }
 
-        val message = createMessage(creator, request)
-        val conversation = createConversation(creator, conversationMembers, message)
+        val message = request.messages?.let { createMessage(creator, it.first()) }
+        val initialConversationMessages = if (message != null) listOf(message) else emptyList()
+        val conversation = createConversation(creator, conversationMembers, initialConversationMessages)
 
         chatDao.insertConversation(conversation)
     }
 
     private fun createMessage(
         creator: User,
-        request: AddConversationDTO
+        request: ChatMessageDTO
     ): Message {
         return Message(
             id = UUID.randomUUID().toString(),
             author = creator,
             createdAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-            text = request.message.text,
-            images = request.message.images,
+            text = request.text,
+            images = request.images,
             isDeleted = false,
         )
     }
@@ -58,14 +62,14 @@ class ChatService(private val userDao: UserDao, private val chatDao: ChatDao) {
     private fun createConversation(
         creator: User,
         conversationMembers: List<String>,
-        message: Message
+        messages: List<Message>
     ): Conversation {
         return Conversation(
             id = UUID.randomUUID().toString(),
             creator = creator,
             createdAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
             users = conversationMembers.map { getUser(it) },
-            messages = listOf(message)
+            messages = messages
         )
     }
 

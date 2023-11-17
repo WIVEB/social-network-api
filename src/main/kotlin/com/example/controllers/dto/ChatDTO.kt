@@ -5,12 +5,13 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ChatDTO (var id: String?,
-                    var users: List<String>,
-                    val createdAt: LocalDateTime,
+data class ChatDTO (var id: String? = null,
+                    var users: List<String>? = null,
+                    val createdAt: LocalDateTime? = null,
                     val name: String? = null,
                     val thumbnail: String? = null,
-                    val messages: List<ChatMessageDTO>){
+                    val messages: List<ChatMessageDTO>? = emptyList()
+){
     companion object{
         fun from (chat: Conversation): ChatDTO {
             return ChatDTO(
