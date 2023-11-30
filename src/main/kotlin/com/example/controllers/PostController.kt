@@ -5,6 +5,7 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 
@@ -19,7 +20,7 @@ fun Route.postController(postService: PostService) {
                 val userEmail = call.principal<UserIdPrincipal>()?.name!!
                 try {
                     postService.addUserPost(userEmail, postRequest)
-                    call.response.status(HttpStatusCode.OK)
+                    call.respond(HttpStatusCode.OK)
                 } catch (e: Error) {
                     throw e
                 }
@@ -31,7 +32,7 @@ fun Route.postController(postService: PostService) {
                 val postId = call.parameters["id"]!!
                 try {
                     postService.updateUserPost(userEmail, postId, postRequest)
-                    call.response.status(HttpStatusCode.OK)
+                    call.respond(HttpStatusCode.OK)
                 } catch (e: Error) {
                     throw e
                 }

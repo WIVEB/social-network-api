@@ -25,7 +25,7 @@ fun Route.userController(userService: UserService) {
                 val userEmail = call.principal<UserIdPrincipal>()?.name!!
                 val friendId = call.parameters["id"]!!
                 userService.addFriend(userEmail, friendId)
-                call.response.status(HttpStatusCode.OK)
+                call.respond(HttpStatusCode.OK)
             }
 
             get() {

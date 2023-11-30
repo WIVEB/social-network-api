@@ -42,11 +42,10 @@ fun Route.chatController(chatService: ChatService) {
                 call.respond(HttpStatusCode.OK, Json.encodeToString(response))
             }
 
-            post {
-                val chatDTO = call.receive<ChatDTO>()
+            post<ChatDTO> {
                 val userEmail = call.principal<UserIdPrincipal>()?.name!!
                 try {
-                    chatService.createConversation(userEmail, chatDTO)
+                    chatService.createConversation(userEmail, it)
                     call.respond(HttpStatusCode.OK)
                 } catch (e: Error) {
                     throw e

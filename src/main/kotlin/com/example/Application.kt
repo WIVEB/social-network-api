@@ -41,7 +41,7 @@ fun main() {
 }
 
 fun Application.module() {
-    val mongoDBClient = MongoDBClient("mongodb://192.169.18.2:27017", "social_network")
+    val mongoDBClient = MongoDBClient("mongodb://127.0.0.1:27017", "social_network")
     configureAuthentication(AuthenticationDao(mongoDBClient))
     configureSockets()
     configureRouting(mongoDBClient)

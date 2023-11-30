@@ -38,9 +38,8 @@ class ChatService(private val userDao: UserDao, private val chatDao: ChatDao) {
             conversationMembers.add(creator.id!!)
         }
 
-        val message = request.messages?.let { createMessage(creator, it.first()) }
-        val initialConversationMessages = if (message != null) listOf(message) else emptyList()
-        val conversation = createConversation(creator, conversationMembers, initialConversationMessages)
+        val messages = request.messages.map { createMessage(creator, it) }
+        val conversation = createConversation(creator, conversationMembers, messages)
 
         chatDao.insertConversation(conversation)
     }
