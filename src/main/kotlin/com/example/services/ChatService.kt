@@ -39,7 +39,7 @@ class ChatService(private val userDao: UserDao, private val chatDao: ChatDao) {
         }
 
         val messages = request.messages.map { createMessage(creator, it) }
-        val conversation = createConversation(creator, conversationMembers, messages)
+        val conversation = createConversation(creator, conversationMembers, request.name, messages)
 
         chatDao.insertConversation(conversation)
     }
@@ -61,6 +61,7 @@ class ChatService(private val userDao: UserDao, private val chatDao: ChatDao) {
     private fun createConversation(
         creator: User,
         conversationMembers: List<String>,
+        name: String?,
         messages: List<Message>
     ): Conversation {
         return Conversation(
@@ -68,7 +69,8 @@ class ChatService(private val userDao: UserDao, private val chatDao: ChatDao) {
             creator = creator,
             createdAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
             users = conversationMembers.map { getUser(it) },
-            messages = messages
+            messages = messages,
+            name = name,
         )
     }
 

@@ -6,11 +6,13 @@ import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import com.example.plugins.*
+import com.typesafe.config.ConfigFactory
 import io.ktor.network.tls.certificates.*
+import io.ktor.server.config.*
 import org.slf4j.*
 import java.io.*
 
-fun main() {
+fun main(args: Array<String>) {
     val keyStoreFile = File("build/keystore.jks")
     val keyStore = buildKeyStore {
         certificate("sampleAlias") {
@@ -20,7 +22,9 @@ fun main() {
     }
     keyStore.saveToFile(keyStoreFile, "123456")
 
-    val environment = applicationEngineEnvironment {
+    val environment = args.firstOrNull()
+
+    embeddedServer(Netty, environment = applicationEngineEnvironment{
         log = LoggerFactory.getLogger("ktor.application")
         connector {
             port = 8080
@@ -33,17 +37,20 @@ fun main() {
             port = 8443
             keyStorePath = keyStoreFile
         }
-        module(Application::module)
-    }
+        module {
+            val configFileName = environment?.let {
+                "application-$environment.conf"
+            } ?: "application-local.conf"
 
-    embeddedServer(Netty, environment)
+            val config = HoconApplicationConfig(ConfigFactory.load(configFileName))
+            val mongoDBClient = MongoDBClient(config.property("ktor.mongo.url").getString(), "social_network")
+
+
+            configureAuthentication(AuthenticationDao(mongoDBClient))
+            configureSockets()
+            configureRouting(mongoDBClient)
+            configureSerialization()
+        }
+    })
         .start(wait = true)
-}
-
-fun Application.module() {
-    val mongoDBClient = MongoDBClient("mongodb://192.169.18.2:27017", "social_network")
-    configureAuthentication(AuthenticationDao(mongoDBClient))
-    configureSockets()
-    configureRouting(mongoDBClient)
-    configureSerialization()
 }
