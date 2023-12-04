@@ -26,7 +26,7 @@ fun Route.chatController(chatService: ChatService) {
                 try {
                     val userConversations = chatService.getUserConversations(userEmail)
                     val response = userConversations.map { ChatDTO.from(it) }
-                    call.respond(HttpStatusCode.OK, response)
+                    call.respond(HttpStatusCode.OK, Json.encodeToString(response))
                 } catch (e: Error) {
                     call.respond(HttpStatusCode.InternalServerError, Json.encodeToString(e))
                 }
@@ -35,13 +35,11 @@ fun Route.chatController(chatService: ChatService) {
             get("/{id}") {
                 val requestUserEmail = call.principal<UserIdPrincipal>()?.name!!
                 val conversationId = call.parameters["id"]!!
-                try {
-                    val userConversation = chatService.getUserConversation(requestUserEmail, conversationId)
-                    val response = ChatDTO.from(userConversation)
-                    call.respond(HttpStatusCode.OK, response)
-                } catch (e: Error) {
-                    call.respond(HttpStatusCode.InternalServerError, Json.encodeToString(e))
-                }
+
+                val userConversation = chatService.getUserConversation(requestUserEmail, conversationId)
+                val response = ChatDTO.from(userConversation)
+
+                call.respond(HttpStatusCode.OK, Json.encodeToString(response))
             }
 
             post<ChatDTO> {
@@ -50,19 +48,19 @@ fun Route.chatController(chatService: ChatService) {
                     chatService.createConversation(userEmail, it)
                     call.respond(HttpStatusCode.OK)
                 } catch (e: Error) {
-                    call.respond(HttpStatusCode.InternalServerError, Json.encodeToString(e))
+                    throw e
                 }
             }
-            post<ChatMessageDTO>("/{id}/message") {
+            post("/{id}/message") {
                 val conversationMessageDTO = call.receive<ChatMessageDTO>()
                 val userEmail = call.principal<UserIdPrincipal>()?.name!!
                 val chatId = call.parameters["id"]!!
                 try {
                     chatService.addConversationMessage(userEmail, chatId, conversationMessageDTO.text,
                         conversationMessageDTO.images)
-                    call.respond(HttpStatusCode.OK)
+                    call.response.status(HttpStatusCode.OK)
                 } catch (e: Error) {
-                    call.respond(HttpStatusCode.InternalServerError, Json.encodeToString(e))
+                    throw e
                 }
             }
 

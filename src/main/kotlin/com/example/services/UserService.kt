@@ -5,8 +5,8 @@ import com.example.social_network.business.UserDao
 
 class UserService(private val userDao: UserDao) {
 
-    fun getUserByEmail(email: String): User {
-        return userDao.findByEmail(email)?.toUser()!!
+    fun getUser(userId: String): User {
+        return userDao.getUser(userId)
     }
 
     fun getUserProfile(userId: String, requestUserEmail: String): User {
