@@ -29,7 +29,7 @@ fun Application.configureRouting(mongoDBClient: MongoDBClient) {
         postController(postService)
         feedController(postService)
         chatController(chatService)
-        openAPI(path="openapi", swaggerFile = "classpath:/openapi/documentation.yaml")
-        swaggerUI(path = "swagger", swaggerFile = "classpath:/openapi/documentation.yaml")
+        openAPI(path="openapi", swaggerFile = "openapi/documentation.yaml")
+        swaggerUI(path = "swagger", swaggerFile = "openapi/documentation.yaml")
     }
 }
