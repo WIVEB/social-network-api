@@ -11,6 +11,8 @@ import com.example.services.PostService
 import com.example.services.UserService
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
+import io.ktor.server.plugins.openapi.*
+import io.ktor.server.plugins.swagger.*
 
 fun Application.configureRouting(mongoDBClient: MongoDBClient) {
 
@@ -27,5 +29,7 @@ fun Application.configureRouting(mongoDBClient: MongoDBClient) {
         postController(postService)
         feedController(postService)
         chatController(chatService)
+        openAPI(path="openapi", swaggerFile = "openapi/documentation.yaml")
+        swaggerUI(path = "swagger", swaggerFile = "openapi/documentation.yaml")
     }
 }

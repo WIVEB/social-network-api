@@ -1,6 +1,6 @@
 package com.example.business
 
-import com.example.controllers.SignUpRequest
+import com.example.controllers.dto.UserDTO
 import com.example.persistance.MongoDBClient
 import com.example.persistance.entity.UserEntity
 import kotlinx.serialization.decodeFromString
@@ -11,7 +11,7 @@ import org.litote.kmongo.findOne
 
 class AuthenticationDao(socialNetworkDB: MongoDBClient) : Dao {
     private val userCollection = socialNetworkDB.db.getCollection("Users")
-    fun signUp( signUpRequest: SignUpRequest){
+    fun signUp( signUpRequest: UserDTO){
         val jsonUserEntity = jsonFormatter.encodeToString(UserEntity.from(signUpRequest))
         userCollection.insertOne(Document.parse(jsonUserEntity))
         // add error handling

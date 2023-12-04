@@ -1,7 +1,7 @@
 package com.example.persistance.entity
 
 import com.example.business.User
-import com.example.controllers.SignUpRequest
+import com.example.controllers.dto.UserDTO
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -25,7 +25,7 @@ data class UserEntity(
                 profileImgUrl = user.profileImgUrl
             )
         }
-        fun from (signUpRequest: SignUpRequest): UserEntity {
+        fun from (signUpRequest: UserDTO): UserEntity {
             return UserEntity(
                 id = UUID.randomUUID().toString(),
                 email = signUpRequest.email,
@@ -38,6 +38,6 @@ data class UserEntity(
         }
     }
     fun toUser(): User {
-        return User(this.id, this.firstname, this.lastname, this.profileImgUrl, this.friends!!, null)
+        return User(this.id, this.firstname, this.lastname, this.profileImgUrl!!, this.friends!!, null)
     }
 }

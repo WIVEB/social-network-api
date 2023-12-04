@@ -8,10 +8,10 @@ data class UserDTO(
     var id: String,
     val email: String? = null,
     val password: String? = null,
-    private val firstname: String,
-    private val friends: List<String>? = emptyList(),
-    private val lastname: String,
-    private val profileImgUrl: String?){
+    val firstname: String,
+    val friends: List<String>? = emptyList(),
+    val lastname: String,
+    val profileImgUrl: String?){
 
     companion object{
         fun from (user: User): UserDTO {

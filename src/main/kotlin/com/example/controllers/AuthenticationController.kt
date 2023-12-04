@@ -1,6 +1,7 @@
 package com.example.controllers
 
 import com.example.business.AuthenticationDao
+import com.example.controllers.dto.UserDTO
 import com.mongodb.MongoException
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -8,9 +9,6 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-
-@kotlinx.serialization.Serializable
-data class SignUpRequest(val firstname: String, val lastname: String, val email: String, val password: String)
 
 fun Route.authenticationController(authenticationDao: AuthenticationDao) {
     route("/signin") {
@@ -21,10 +19,9 @@ fun Route.authenticationController(authenticationDao: AuthenticationDao) {
         }
     }
     route("/signup") {
-        post() {
-            val signUpRequest = call.receive<SignUpRequest>()
+        post<UserDTO>() {
             try {
-                authenticationDao.signUp(signUpRequest)
+                authenticationDao.signUp(it)
                 call.response.status(HttpStatusCode.OK)
             } catch (mongoError: MongoException) {
                 when (mongoError.code) {
