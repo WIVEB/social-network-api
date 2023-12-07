@@ -91,7 +91,8 @@ fun Route.chatController(chatService: ChatService) {
                         )
 
                         connections.forEach {
-                            it.session.send(Json.encodeToString(ChatMessageDTO.from(newMessage)))
+                            val sessionUser = chatService.getUserByEmail(it.userEmail)
+                            it.session.send(Json.encodeToString(ChatMessageDTO.from(newMessage, sessionUser.id == newMessage.author.id)))
                         }
                     }
                 } catch (e: Exception) {

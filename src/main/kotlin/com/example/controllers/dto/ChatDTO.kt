@@ -11,8 +11,7 @@ data class ChatDTO (var id: String? = null,
                     val createdAt: LocalDateTime? = null,
                     val name: String? = null,
                     val thumbnail: String? = null,
-                    val messages: List<ChatMessageDTO> = emptyList(),
-                    val fromCurrentUser: Boolean? = null
+                    val messages: List<ChatMessageDTO> = emptyList()
 ){
     companion object{
         fun from (chat: Conversation, currentUser: User): ChatDTO {
@@ -22,8 +21,7 @@ data class ChatDTO (var id: String? = null,
                 createdAt = chat.createdAt,
                 name = chat.name,
                 thumbnail = chat.thumbnail,
-                messages = chat.messages!!.map { ChatMessageDTO.from(it) },
-                fromCurrentUser = currentUser.id == chat.creator.id
+                messages = chat.messages!!.map { ChatMessageDTO.from(it, it.author.id == currentUser.id) }
             )
         }
     }

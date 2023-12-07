@@ -9,15 +9,18 @@ data class ChatMessageDTO (var id: String? = null,
                            var author: String? = null,
                            val createdAt: LocalDateTime? = null,
                            val text: String? = null,
-                           val images: List<String>? = null){
+                           val images: List<String>? = null,
+                           val fromCurrentUser: Boolean? = null
+){
     companion object{
-        fun from (message: Message): ChatMessageDTO {
+        fun from (message: Message, isFromCurrentUser: Boolean): ChatMessageDTO {
             return ChatMessageDTO(
                 id = message.id!!,
                 author = message.author.id!!,
                 createdAt = message.createdAt,
                 text = message.text,
-                images = message.images
+                images = message.images,
+                fromCurrentUser = isFromCurrentUser
             )
         }
     }
