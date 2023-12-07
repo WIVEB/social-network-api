@@ -21,6 +21,7 @@ fun Route.authenticationController(authenticationDao: AuthenticationDao) {
     route("/signup") {
         post<UserDTO>() {
             try {
+                validateEmail(it.email)
                 authenticationDao.signUp(it)
                 call.response.status(HttpStatusCode.OK)
             } catch (mongoError: MongoException) {
@@ -36,5 +37,11 @@ fun Route.authenticationController(authenticationDao: AuthenticationDao) {
                 throw e
             }
         }
+    }
+}
+const val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$"
+fun validateEmail(email: String?) {
+    if(email == null || !email.matches(emailRegex.toRegex())){
+        throw Exception("Invalid email")
     }
 }
