@@ -24,8 +24,9 @@ fun Route.chatController(chatService: ChatService) {
             get {
                 val userEmail = call.principal<UserIdPrincipal>()?.name!!
                 try {
+                    val currentUser = chatService.getUserByEmail(userEmail)
                     val userConversations = chatService.getUserConversations(userEmail)
-                    val response = userConversations.map { ChatDTO.from(it) }
+                    val response = userConversations.map { ChatDTO.from(it, currentUser) }
                     call.respond(HttpStatusCode.OK, response)
                 } catch (e: Error) {
                     call.respond(HttpStatusCode.InternalServerError, Json.encodeToString(e))
@@ -36,8 +37,9 @@ fun Route.chatController(chatService: ChatService) {
                 val requestUserEmail = call.principal<UserIdPrincipal>()?.name!!
                 val conversationId = call.parameters["id"]!!
                 try {
+                    val currentUser = chatService.getUserByEmail(requestUserEmail)
                     val userConversation = chatService.getUserConversation(requestUserEmail, conversationId)
-                    val response = ChatDTO.from(userConversation)
+                    val response = ChatDTO.from(userConversation, currentUser)
                     call.respond(HttpStatusCode.OK, response)
                 } catch (e: Error) {
                     call.respond(HttpStatusCode.InternalServerError, Json.encodeToString(e))

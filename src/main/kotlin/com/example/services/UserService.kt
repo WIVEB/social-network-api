@@ -1,6 +1,6 @@
 package com.example.services
 
-import com.example.business.User
+import com.example.business.models.User
 import com.example.social_network.business.UserDao
 
 class UserService(private val userDao: UserDao) {

@@ -1,4 +1,4 @@
-package com.example.business
+package com.example.business.models
 
 import com.example.business.models.Post
 

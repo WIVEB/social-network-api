@@ -1,6 +1,6 @@
 package com.example.services
 
-import com.example.business.User
+import com.example.business.models.User
 import com.example.business.models.Conversation
 import com.example.business.models.Message
 import com.example.controllers.dto.ChatDTO

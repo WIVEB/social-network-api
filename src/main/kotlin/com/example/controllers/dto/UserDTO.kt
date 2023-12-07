@@ -1,6 +1,6 @@
 package com.example.controllers.dto
 
-import com.example.business.User
+import com.example.business.models.User
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -1,15 +1,12 @@
 package com.example.persistance
 
-import com.example.business.User
+import com.example.business.models.User
 import com.example.business.models.Conversation
 import com.example.business.models.Message
-import com.example.business.models.Post
 import com.example.persistance.entity.ChatEntity
 import com.example.persistance.entity.MessageEntity
-import com.example.persistance.entity.PostEntity
 import com.example.persistance.entity.UserEntity
 import com.example.social_network.business.ChatDao
-import com.mongodb.client.model.Updates
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import org.bson.Document
@@ -58,7 +55,7 @@ class ChatDaoImpl(socialNetworkDB: MongoDBClient) : ChatDao {
             .map { it.toMessage(this.getConversationUser(it.creatorUserId)) }
     }
 
-    private fun getConversationUser(id: String): User{
+    private fun getConversationUser(id: String): User {
         val user = userCollection.findOne(UserEntity::id eq id)
         val toJson = user?.toJson()!!
         val userEntity = jsonFormatter.decodeFromString<UserEntity>(toJson)
@@ -89,7 +86,7 @@ class ChatDaoImpl(socialNetworkDB: MongoDBClient) : ChatDao {
         return chatEntity.toConversation(creator, members, messages)
     }
 
-    private fun getConversationMember(id: String): User{
+    private fun getConversationMember(id: String): User {
         val user = userCollection.findOne(UserEntity::id eq id)
         val toJson = user?.toJson()!!
         val userEntity = jsonFormatter.decodeFromString<UserEntity>(toJson)

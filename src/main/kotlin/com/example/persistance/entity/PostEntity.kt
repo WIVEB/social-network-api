@@ -1,6 +1,6 @@
 package com.example.persistance.entity
 
-import com.example.business.User
+import com.example.business.models.User
 import com.example.business.models.Post
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable

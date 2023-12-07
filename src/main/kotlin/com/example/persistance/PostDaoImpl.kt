@@ -1,6 +1,6 @@
 package com.example.persistance
 
-import com.example.business.User
+import com.example.business.models.User
 import com.example.business.models.Post
 import com.example.persistance.entity.PostEntity
 import com.example.persistance.entity.UserEntity
@@ -51,7 +51,7 @@ class PostDaoImpl(socialNetworkDB: MongoDBClient) : PostDao {
             .map { it.toPost(this.getPostUser(it.userId)) }
     }
 
-    private fun getPostUser(id: String): User{
+    private fun getPostUser(id: String): User {
         val user = userCollection.findOne(UserEntity::id eq id)
         val toJson = user?.toJson()!!
         val userEntity = jsonFormatter.decodeFromString<UserEntity>(toJson)

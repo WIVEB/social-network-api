@@ -1,6 +1,5 @@
 package com.example.business.models
 
-import com.example.business.User
 import kotlinx.datetime.LocalDateTime
 
 class Conversation (
