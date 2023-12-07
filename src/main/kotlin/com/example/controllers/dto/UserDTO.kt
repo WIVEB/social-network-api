@@ -5,13 +5,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserDTO(
-    var id: String,
+    var id: String? = null,
     val email: String? = null,
     val password: String? = null,
-    val firstname: String,
+    val firstname: String? = null,
     val friends: List<String>? = emptyList(),
-    val lastname: String,
-    val profileImgUrl: String?){
+    val lastname: String? = null,
+    val profileImgUrl: String? = null){
 
     companion object{
         fun from (user: User): UserDTO {
