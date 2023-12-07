@@ -30,8 +30,8 @@ data class UserEntity(
                 id = UUID.randomUUID().toString(),
                 email = signUpRequest.email,
                 password = signUpRequest.password,
-                firstname = signUpRequest.firstname,
-                lastname = signUpRequest.lastname,
+                firstname = signUpRequest.firstname ?: "John",
+                lastname = signUpRequest.lastname ?: "Doe",
                 friends = emptyList(),
                 profileImgUrl = ""
             )
