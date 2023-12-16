@@ -6,14 +6,12 @@ import com.example.business.models.Message
 import com.example.persistance.entity.ChatEntity
 import com.example.persistance.entity.MessageEntity
 import com.example.persistance.entity.UserEntity
-import com.example.social_network.business.ChatDao
+import com.example.business.ChatDao
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import org.bson.Document
+import org.bson.Document.*
 import org.bson.conversions.Bson
-import org.litote.kmongo.contains
-import org.litote.kmongo.eq
-import org.litote.kmongo.findOne
+import org.litote.kmongo.*
 import java.util.*
 
 class ChatDaoImpl(socialNetworkDB: MongoDBClient) : ChatDao {
@@ -34,15 +32,25 @@ class ChatDaoImpl(socialNetworkDB: MongoDBClient) : ChatDao {
     override fun insertConversation(conversation: Conversation): String {
         conversation.id = UUID.randomUUID().toString()
         val conversationEntity = ChatEntity.from(conversation)
-        chatCollection.insertOne(Document.parse(jsonFormatter.encodeToString(conversationEntity)))
+        chatCollection.insertOne(parse(jsonFormatter.encodeToString(conversationEntity)))
         conversation.messages?.forEach { this.insertConversationMessage(it, conversation.id!!) }
+        return conversation.id!!
+    }
+
+    override fun updateConversation(conversation: Conversation): String {
+        val conversationEntity = ChatEntity.from(conversation)
+        chatCollection.replaceOne(
+            ChatEntity::id eq conversation.id,
+            parse(jsonFormatter.encodeToString(conversationEntity)
+            )
+        )
         return conversation.id!!
     }
 
     override fun insertConversationMessage(message: Message, conversationUuid: String): String {
         message.id = UUID.randomUUID().toString()
         val messageEntity = MessageEntity.from(message, conversationUuid)
-        messageCollection.insertOne(Document.parse(jsonFormatter.encodeToString(messageEntity)))
+        messageCollection.insertOne(parse(jsonFormatter.encodeToString(messageEntity)))
         return message.id!!
     }
 

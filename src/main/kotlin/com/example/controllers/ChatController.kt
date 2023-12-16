@@ -55,6 +55,18 @@ fun Route.chatController(chatService: ChatService) {
                     call.respond(HttpStatusCode.InternalServerError, Json.encodeToString(e))
                 }
             }
+
+            put<ChatDTO>("/{id}") {
+                val userEmail = call.principal<UserIdPrincipal>()?.name!!
+                val conversationId = call.parameters["id"]!!
+                try {
+                    chatService.updateConversation(userEmail, conversationId, it)
+                    call.respond(HttpStatusCode.OK)
+                } catch (e: Error) {
+                    call.respond(HttpStatusCode.InternalServerError, Json.encodeToString(e))
+                }
+            }
+
             post<ChatMessageDTO>("/{id}/message") {
                 val userEmail = call.principal<UserIdPrincipal>()?.name!!
                 val chatId = call.parameters["id"]!!

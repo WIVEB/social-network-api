@@ -9,8 +9,8 @@ import kotlinx.serialization.Serializable
 data class ChatDTO (var id: String? = null,
                     var users: List<String>? = null,
                     val createdAt: LocalDateTime? = null,
-                    val name: String? = null,
-                    val thumbnail: String? = null,
+                    var name: String? = null,
+                    var thumbnail: String? = null,
                     val messages: List<ChatMessageDTO> = emptyList()
 ){
     companion object{

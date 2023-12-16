@@ -85,6 +85,27 @@ paths:
               required: true
               schema:
                 type: "string"
+    put:
+      description: "Update a conversation (Only name, users and thumbnail can be updated)"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatDTO'
+      responses:
+        "200":
+          description: "OK"
+          content:
+            'application/json':
+              schema:
+                type: "object"
+        "500":
+          description: "Internal Server Error"
+          content:
+            'application/json':
+              schema:
+                type: "string"
   /feed:
     get:
       description: "Get the user feed (Posts by the friends user's)"

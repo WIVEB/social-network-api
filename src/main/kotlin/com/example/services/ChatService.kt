@@ -5,7 +5,7 @@ import com.example.business.models.Conversation
 import com.example.business.models.Message
 import com.example.controllers.dto.ChatDTO
 import com.example.controllers.dto.ChatMessageDTO
-import com.example.social_network.business.ChatDao
+import com.example.business.ChatDao
 import com.example.social_network.business.UserDao
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -42,6 +42,28 @@ class ChatService(private val userDao: UserDao, private val chatDao: ChatDao) {
         val conversation = createConversation(creator, conversationMembers, request.name, messages)
 
         chatDao.insertConversation(conversation)
+    }
+
+    fun updateConversation(userEmail: String, conversationId: String, request: ChatDTO){
+        val conversation = chatDao.findConversation(conversationId)
+        if (conversation == null){
+            throw Exception("Conversation doesn't exist!")
+        }
+
+        val requestUser = userDao.findByEmail(userEmail)!!
+        if (!isUserMemberOf(requestUser.toUser(), conversation.users.map { it.id!! })){
+            throw Exception("User is not member of the conversation!")
+        }
+
+        conversation.name = request.name ?: conversation.name
+        request.users?.let {
+            val users = it.map { userId -> userDao.getUser(userId) }
+            conversation.users = users
+        }
+        conversation.thumbnail = request.thumbnail ?: conversation.thumbnail
+
+
+        chatDao.updateConversation(conversation)
     }
 
     private fun createMessage(
