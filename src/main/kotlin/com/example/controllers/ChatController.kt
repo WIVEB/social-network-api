@@ -19,6 +19,9 @@ import java.util.*
 import kotlin.collections.LinkedHashSet
 
 fun Route.chatController(chatService: ChatService) {
+
+    val connections = Collections.synchronizedSet<Connection?>(LinkedHashSet())
+
     authenticate("auth_basic") {
         route("/chat") {
             get {
@@ -71,15 +74,23 @@ fun Route.chatController(chatService: ChatService) {
                 val userEmail = call.principal<UserIdPrincipal>()?.name!!
                 val chatId = call.parameters["id"]!!
                 try {
-                    chatService.addConversationMessage(userEmail, chatId, it.text,
-                        it.images)
+                    val newMessage = chatService.addConversationMessage(
+                        userEmail, chatId, it.text,
+                        it.images
+                    )
+                    connections.forEach {connection ->
+                        if (chatId == connection.conversationId){
+                            val sessionUser = chatService.getUserByEmail(connection.userEmail)
+                            connection.session.send(Json.encodeToString(ChatMessageDTO.from(newMessage, sessionUser.id == newMessage.author.id)))
+
+                        }
+                    }
                     call.respond(HttpStatusCode.OK)
                 } catch (e: Error) {
                     call.respond(HttpStatusCode.InternalServerError, Json.encodeToString(e))
                 }
             }
 
-            val connections = Collections.synchronizedSet<Connection?>(LinkedHashSet())
             webSocket("/{id}") {
                 val requestUserEmail = call.principal<UserIdPrincipal>()?.name!!
                 val conversationId = call.parameters["id"]!!
@@ -103,8 +114,10 @@ fun Route.chatController(chatService: ChatService) {
                         )
 
                         connections.forEach {
-                            val sessionUser = chatService.getUserByEmail(it.userEmail)
-                            it.session.send(Json.encodeToString(ChatMessageDTO.from(newMessage, sessionUser.id == newMessage.author.id)))
+                            if(it.conversationId == conversationId){
+                                val sessionUser = chatService.getUserByEmail(it.userEmail)
+                                it.session.send(Json.encodeToString(ChatMessageDTO.from(newMessage, sessionUser.id == newMessage.author.id)))
+                            }
                         }
                     }
                 } catch (e: Exception) {
