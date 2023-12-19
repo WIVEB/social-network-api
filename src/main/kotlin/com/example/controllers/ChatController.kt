@@ -1,5 +1,6 @@
 package com.example.controllers
 
+import com.example.business.models.Conversation
 import com.example.controllers.dto.ChatDTO
 import com.example.controllers.dto.ChatMessageDTO
 import com.example.plugins.Connection
@@ -52,8 +53,8 @@ fun Route.chatController(chatService: ChatService) {
             post<ChatDTO> {
                 val userEmail = call.principal<UserIdPrincipal>()?.name!!
                 try {
-                    chatService.createConversation(userEmail, it)
-                    call.respond(HttpStatusCode.OK)
+                    val conversation = chatService.createConversation(userEmail, it)
+                    call.respond(HttpStatusCode.OK, ChatDTO.from(conversation, conversation.creator))
                 } catch (e: Error) {
                     call.respond(HttpStatusCode.InternalServerError, Json.encodeToString(e))
                 }

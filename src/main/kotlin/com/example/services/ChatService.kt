@@ -29,7 +29,7 @@ class ChatService(private val userDao: UserDao, private val chatDao: ChatDao) {
         return message
     }
 
-    fun createConversation(userEmail: String, request: ChatDTO){
+    fun createConversation(userEmail: String, request: ChatDTO): Conversation{
         val creator = userDao.findByEmail(userEmail)!!.toUser()
 
         val conversationMembers = (request.users ?: emptyList()).toMutableList()
@@ -42,6 +42,7 @@ class ChatService(private val userDao: UserDao, private val chatDao: ChatDao) {
         val conversation = createConversation(creator, conversationMembers, request.name, messages)
 
         chatDao.insertConversation(conversation)
+        return conversation
     }
 
     fun updateConversation(userEmail: String, conversationId: String, request: ChatDTO){
