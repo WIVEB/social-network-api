@@ -54,6 +54,10 @@ class ChatDaoImpl(socialNetworkDB: MongoDBClient) : ChatDao {
         return message.id!!
     }
 
+    override fun deleteConversation(conversationId: String) {
+        chatCollection.deleteOne(ChatEntity::id eq conversationId)
+    }
+
 
     private fun findMessagesByConversation(conversationId: String): List<Message> {
         val messageDocuments = messageCollection.find(MessageEntity::conversationId eq conversationId)

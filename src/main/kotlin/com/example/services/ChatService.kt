@@ -125,4 +125,13 @@ class ChatService(private val userDao: UserDao, private val chatDao: ChatDao) {
 
         return conversation
     }
+
+    fun deleteUserConversation(userEmail: String, conversationId: String) {
+        val userConversations = getUserConversations(userEmail)
+
+        val conversation = userConversations.find { it.id == conversationId }
+            ?: throw Exception("Unable to find conversation $conversationId associated to this user")
+
+        chatDao.deleteConversation(conversationId)
+    }
 }
