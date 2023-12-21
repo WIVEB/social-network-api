@@ -19,7 +19,7 @@ fun Route.userController(userService: UserService) {
                 try {
                     val user = userService.getUserByEmail(requestUserEmail)
                     val response = UserDTO.from(user)
-                    call.respond(Json.encodeToString(response))
+                    call.respond(response)
                 }catch (e: Error){
                     call.respond(HttpStatusCode.InternalServerError, Json.encodeToString(e))
                 }
